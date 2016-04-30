@@ -1,150 +1,203 @@
+--Check for existence of object before we add them.
+CREATE TABLE SoftwarePlatform
+(
+P_SoftwarePlatformNumber int NOT NULL PRIMARY KEY,
+
+PlatformName varchar(255) NOT NULL UNIQUE,
+)
+
 CREATE TABLE Product
 (
 P_ProductNumber int NOT NULL PRIMARY KEY,
-ProductName varchar(255) NOT NULL UNIQUE,
 
+ProductName varchar(255),
+)
+
+CREATE TABLE Release
+(
+P_ReleaseNumber decimal(2,1),
+P_ProductNumber int,
+P_SoftwarePlatformNumber int,
+
+PRIMARY KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+
+FOREIGN KEY(P_ProductNumber) REFERENCES Product(P_ProductNumber),
+FOREIGN KEY(P_SoftwarePlatformNumber ) REFERENCES SoftwarePlatform(P_SoftwarePlatformNumber),
+)
+
+CREATE TABLE CustomerRelease
+(
+P_ReleaseNumber decimal(2,1),
+P_ProductNumber int,
+P_SoftwarePlatformNumber int,
+
+PRIMARY KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+FOREIGN KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber) REFERENCES Release(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+
+URL nchar(255) NULL UNIQUE,
+CustomerReleaseDate date NOT NULL,
+)
+
+CREATE TABLE DevelopmentRelease
+(
+P_ReleaseNumber decimal(2,1),
+P_ProductNumber int,
+P_SoftwarePlatformNumber int,
+
+PRIMARY KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+FOREIGN KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber) REFERENCES Release(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+
+P_Iteration int NOT NULL,
+StartDate date NOT NULL,
+EndDate date NOT NULL,
+Sprint int NOT NULL,
+Commits int NOT NULL,
+)
+
+CREATE TABLE ProductVersion
+(
+P_ProductVersionNumber decimal(2,1) NOT NULL PRIMARY KEY,
+)
+
+
+CREATE TABLE Feature
+(
+P_FeatureNumber int NOT NULL PRIMARY KEY,
+FeatureDesciption varchar(255) NOT NULL,
+)
+
+CREATE TABLE FeatureSet(
+
+P_ProductVersionNumber decimal(2,1),
+P_FeatureNumber int,
+
+PRIMARY KEY(P_ProductVersionNumber,P_FeatureNumber),
+
+FOREIGN KEY(P_ProductVersionNumber) REFERENCES ProductVersion(P_ProductVersionNumber),
+FOREIGN KEY(P_FeatureNumber) REFERENCES Feature(P_FeatureNumber),
+
+)
+
+
+
+CREATE TABLE ReleaseVersion(
+
+P_ProductVersionNumber decimal(2,1),
+
+P_ReleaseNumber decimal(2,1),
+P_ProductNumber int,
+P_SoftwarePlatformNumber int,
+
+PRIMARY KEY(P_ProductVersionNumber,P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+
+FOREIGN KEY(P_ProductVersionNumber) REFERENCES ProductVersion(P_ProductVersionNumber),
+
+FOREIGN KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber) 
+REFERENCES Release(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+
+)
+
+CREATE TABLE SourceRoot
+(
+P_SourceRootNumber int NOT NULL PRIMARY KEY,
+)
+
+CREATE TABLE Branch
+(
+P_SourceRootNumber int,
+P_ReleaseNumber decimal(2,1),
+P_ProductNumber int,
+P_SoftwarePlatformNumber int,
+
+PRIMARY KEY(P_SourceRootNumber,P_ProductNumber,P_ReleaseNumber, P_SoftwarePlatformNumber),
+
+FOREIGN KEY(P_SourceRootNumber) REFERENCES SourceRoot(P_SourceRootNumber),
+FOREIGN KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber) 
+REFERENCES Release(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+
+BranchNumber int NOT NULL,
+)
+
+CREATE TABLE DownloadFile
+(
+P_DownloadFileNumber int NOT NULL PRIMARY KEY,
+Name varchar(255) NOT NULL UNIQUE,
 )
 
 CREATE TABLE Customer
 (
 P_CustomerNumber int NOT NULL PRIMARY KEY,
 
+CustomerName varchar(255) NOT NULL,
+)
 
+CREATE TABLE PhoneNumber
+(
+P_PhoneNumberID int PRIMARY KEY,
+
+PhoneNumber varchar(15) NOT NULL,
+PhoneType varchar(10) NOT NULL,
+)
+
+CREATE TABLE Company(
+P_CompanyNumber int PRIMARY KEY,
+
+CompanyName varchar(50),
+CompanyAddress varchar(50),
+)
+
+CREATE TABLE Email(
+P_EmailNumber int PRIMARY KEY,
+
+Email varchar(50),
 )
 
 CREATE TABLE Subscription
 (
-P_SubscriptionNumber int NOT NULL PRIMARY KEY,
-DownloadDate date NOT NULL,
+P_CustomerNumber int ,
+P_PhoneNumberID int,
+P_CompanyNumber int,
+P_EmailNumber int,
 
-P_CustomerNumber int FOREIGN KEY REFERENCES Customer(P_CustomerNumber),
-)
+PRIMARY KEY(P_CustomerNumber,P_PhoneNumberID ,P_CompanyNumber,P_EmailNumber),
 
+FOREIGN KEY(P_CustomerNumber) REFERENCES Customer(P_CustomerNumber),
+FOREIGN KEY(P_PhoneNumberID) REFERENCES PhoneNumber(P_PhoneNumberID),
+FOREIGN KEY(P_CompanyNumber) REFERENCES Company(P_CompanyNumber),
+FOREIGN KEY(P_EmailNumber) REFERENCES Email(P_EmailNumber),
 
-
-CREATE TABLE SourceControl
-(
-P_SourceControlNumber int NOT NULL PRIMARY KEY,
-
-)
-
-
-CREATE TABLE SourceRoot
-(
-P_SourceRootNumber int NOT NULL PRIMARY KEY,
-
-P_SourceControlNumber int FOREIGN KEY REFERENCES SourceControl(P_SourceControlNumber),
-)
-
-CREATE TABLE StabilityLabel
-(
-P_StabilityNumber int NOT NULL PRIMARY KEY,
-StabilityText nchar(10) NOT NULL UNIQUE,
-
-
-
-)
-CREATE TABLE FeatureDescription
-(
-P_FeatureDescriptionNumber int NOT NULL PRIMARY KEY,
-
-
-)
-
-CREATE TABLE FeatureState
-(
-P_FeatureStateNumber int NOT NULL PRIMARY KEY,
-
-
-)
-
-CREATE TABLE Feature
-(
-P_FeatureSNumber int NOT NULL PRIMARY KEY,
-
-P_FeatureStateNumber int FOREIGN KEY REFERENCES FeatureState(P_FeatureStateNumber)
-)
-
-
-CREATE TABLE FileExtension
-(
-P_FileExentionNumber int NOT NULL PRIMARY KEY,
-Name int NOT NULL,
-
-)
-
-CREATE TABLE DownloadFile
-(
-P_DownloadFileNumber int NOT NULL PRIMARY KEY,
-Name int NOT NULL,
-
-P_FileExtensionNumber int FOREIGN KEY REFERENCES FileExtension(P_FileExentionNumber)
-)
-
-CREATE TABLE ProductVersion
-(
-P_ProductVersionNumber int NOT NULL PRIMARY KEY,
-
-P_ProductNumber int FOREIGN KEY REFERENCES Product(P_ProductNumber)
-)
-
-
-CREATE TABLE CustomerRelease
-(
-P_CustomerReleaseNumber int NOT NULL  PRIMARY KEY,
-URL nchar(10) NULL UNIQUE,
-CustomerReleaseDate date NOT NULL,
-
-P_FeatureDescriptionNumber int FOREIGN KEY REFERENCES FeatureDescription(P_FeatureDescriptionNumber),
-P_ProductVersionNumber int FOREIGN KEY REFERENCES ProductVersion(P_ProductVersionNumber),
-P_ProductNumber int FOREIGN KEY REFERENCES Product(P_ProductNumber),
-P_DownloadFileNumber int FOREIGN KEY REFERENCES DownloadFile(P_DownloadFileNumber),
-
-)
-
-
-CREATE TABLE DevelopmentRelease
-(
-P_DevelopmentReleaseNumber int NOT NULL PRIMARY KEY,
-StartDate date NOT NULL,
-EndDate date NOT NULL,
-Iteration int NOT NULL,
-Sprint int NOT NULL,
-Commits int NOT NULL,
-
-P_StabilityNumber int FOREIGN KEY REFERENCES StabilityLabel(P_StabilityNumber),
-P_FeatureDescriptionNumber int FOREIGN KEY REFERENCES FeatureDescription(P_FeatureDescriptionNumber)
-)
-
-
-CREATE TABLE Branch
-(
-P_BranchNumber int NOT NULL PRIMARY KEY,
-
-
-P_FeatureDescriptionNumber int FOREIGN KEY REFERENCES FeatureDescription(P_FeatureDescriptionNumber),
-P_ProductVersionNumber int FOREIGN KEY REFERENCES ProductVersion(P_ProductVersionNumber),
-P_ProductNumber int FOREIGN KEY REFERENCES Product(P_ProductNumber),
-P_DownloadFileNumber int FOREIGN KEY REFERENCES DownloadFile(P_DownloadFileNumber),
-P_StabilityNumber int FOREIGN KEY REFERENCES StabilityLabel(P_StabilityNumber),
-P_DevelopmentReleaseNumber int FOREIGN KEY REFERENCES DevelopmentRelease(P_DevelopmentReleaseNumber),
-P_CustomerReleaseNumber int FOREIGN KEY REFERENCES CustomerRelease(P_CustomerReleaseNumber),
-P_SourceControlNumber int FOREIGN KEY REFERENCES SourceControl(P_SourceControlNumber),
-P_SourceRootNumber int FOREIGN KEY REFERENCES SourceRoot(P_SourceRootNumber),
+CustomerLogin varchar(25) NOT NULL UNIQUE,
+CustomerPassword varchar(25) NOT NULL UNIQUE,
 
 )
 
 CREATE TABLE CustomerDownload
 (
-P_CustomerDownloadNumber int NOT NULL PRIMARY KEY,
+P_CustomerNumber int ,
+P_PhoneNumberID int,
+P_CompanyNumber int,
+P_EmailNumber int,
+P_DownloadFileNumber int,
+P_ProductNumber int ,
+P_ProductVersionNumber decimal(2,1),
+P_ReleaseNumber decimal(2,1),
+P_SoftwarePlatformNumber int,
 
-P_CustomerNumber int FOREIGN KEY REFERENCES Customer(P_CustomerNumber),
-P_SubscriptionNumber int FOREIGN KEY REFERENCES Subscription(P_SubscriptionNumber),
-P_CustomerReleaseNumber int FOREIGN KEY REFERENCES CustomerRelease(P_CustomerReleaseNumber),
-P_ProductNumber int FOREIGN KEY REFERENCES Product(P_ProductNumber),
-P_ProductVersionNumber int FOREIGN KEY REFERENCES ProductVersion(P_ProductVersionNumber),
-P_DownloadFileNumber int FOREIGN KEY REFERENCES DownloadFile(P_DownloadFileNumber),
-P_FeatureDescriptionNumber int FOREIGN KEY REFERENCES FeatureDescription(P_FeatureDescriptionNumber),
+PRIMARY KEY(P_CustomerNumber,P_PhoneNumberID,P_CompanyNumber,P_EmailNumber,
+            P_DownloadFileNumber,
+			P_ProductNumber, P_ProductVersionNumber,P_ReleaseNumber, P_SoftwarePlatformNumber),
+
+FOREIGN KEY(P_CustomerNumber, P_PhoneNumberID,P_CompanyNumber,P_EmailNumber) 
+REFERENCES Subscription(P_CustomerNumber,P_PhoneNumberID,P_CompanyNumber,P_EmailNumber),
+
+FOREIGN KEY(P_DownloadFileNumber) REFERENCES DownloadFile(P_DownloadFileNumber),
+
+FOREIGN KEY(P_ProductVersionNumber, P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber) 
+REFERENCES ReleaseVersion(P_ProductVersionNumber,P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
+
+
+DownloadCount int NOT NULL,
+DownloadDate date NOT NULL,
 )
 
 
