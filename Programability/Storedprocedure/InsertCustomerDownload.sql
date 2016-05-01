@@ -18,20 +18,27 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE InsertSoftwarePlatform
+CREATE PROCEDURE InsertCustomerDownload
 	-- Add the parameters for the stored procedure here
-	@PlatformNumber int,
-	@PlatformName varchar(255)
-	
+	@CustomerNumber int,
+	@PhoneNumberID int,
+	@EmailNumber int,
+	@CompanyNumber int,
+	@DownloadFileNumber int,
+	@ProductVersion decimal(2,1),
+	@ReleaseNumber  decimal(2,1), 
+	@ProductNumber  int,
+	@SoftwarePlatform int
+
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	BEGIN TRY
-		INSERT INTO SoftwarePlatform VALUES(@PlatformNumber,@PlatformName)
+		INSERT INTO CustomerDownload VALUES(@CustomerNumber,@PhoneNumberID,@EmailNumber,@CompanyNumber,@DownloadFileNumber,@ProductVersion,@ReleaseNumber, @ProductNumber,@SoftwarePlatform)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error Inserting a SiftwarePlatform',10, 1); -- Second substitution argument.
+		RAISERROR(N'THere was an error Inserting CustomerDownload',10, 1); -- Second substitution argument.
 	END CATCH
 END
 GO

@@ -18,20 +18,18 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE InsertSoftwarePlatform
+CREATE PROCEDURE GetFeatureNumber
 	-- Add the parameters for the stored procedure here
-	@PlatformNumber int,
-	@PlatformName varchar(255)
-	
+	@FeatureDescription varchar(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	BEGIN TRY
-		INSERT INTO SoftwarePlatform VALUES(@PlatformNumber,@PlatformName)
+		INSERT INTO Feature VALUES(@FeatureNumber,@FeatureDescription)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error Inserting a SiftwarePlatform',10, 1); -- Second substitution argument.
+		RAISERROR(N'THere was an error Inserting a feature',10, 1); 
 	END CATCH
 END
 GO

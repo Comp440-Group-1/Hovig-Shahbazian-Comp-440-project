@@ -18,20 +18,23 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE InsertSoftwarePlatform
+CREATE PROCEDURE InsertBranch
 	-- Add the parameters for the stored procedure here
-	@PlatformNumber int,
-	@PlatformName varchar(255)
-	
+	@ProductVersion decimal(2,1),
+	@ReleaseNumber  decimal(2,1), 
+	@ProductNumber  int,
+	@SoftwarePlatform int,
+	@BranchNumber int
+
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	BEGIN TRY
-		INSERT INTO SoftwarePlatform VALUES(@PlatformNumber,@PlatformName)
+		INSERT INTO Branch VALUES(@ProductVersion,@ReleaseNumber, @ProductNumber ,@SoftwarePlatform,@BranchNumber)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error Inserting a SiftwarePlatform',10, 1); -- Second substitution argument.
+		RAISERROR(N'THere was an error in Inserting a Branch',10, 1); 
 	END CATCH
 END
 GO

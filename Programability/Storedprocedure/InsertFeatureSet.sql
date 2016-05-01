@@ -18,7 +18,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE InsertVersion
+CREATE PROCEDURE InsertFeatureSet
 	-- Add the parameters for the stored procedure here
 	@ProductVersion decimal(2,1),
 	@FeatureNumber int
@@ -30,7 +30,7 @@ BEGIN
 		INSERT INTO  FeatureSet VALUES(@ProductVersion,@FeatureNumber)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error in inserting a version',10, 1); 
+		RAISERROR(N'THere was an error Inserting a FeatureSet',10, 1); 
 	END CATCH
 END
 GO

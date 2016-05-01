@@ -33,7 +33,7 @@ BEGIN
 		INSERT INTO Release VALUES(@ReleaseNumber,@ProductNumber,@SoftwarePlatform)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error in inserting a Release',10, 1); -- Second substitution argument.
+		RAISERROR(N'THere was an error Inserting a Release',10, 1); -- Second substitution argument.
 	END CATCH
 END
 GO

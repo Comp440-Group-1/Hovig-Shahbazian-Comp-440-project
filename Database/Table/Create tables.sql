@@ -1,16 +1,17 @@
 --Check for existence of object before we add them.
 CREATE TABLE SoftwarePlatform
 (
-P_SoftwarePlatformNumber int NOT NULL PRIMARY KEY,
+P_SoftwarePlatformNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 
 PlatformName varchar(255) NOT NULL UNIQUE,
 )
 
 CREATE TABLE Product
 (
-P_ProductNumber int NOT NULL PRIMARY KEY,
+P_ProductNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 
-ProductName varchar(255),
+ProductName varchar(255) NOT NULL UNIQUE,
+ProductDescription varchar(255),
 )
 
 CREATE TABLE Release
@@ -62,7 +63,7 @@ P_ProductVersionNumber decimal(2,1) NOT NULL PRIMARY KEY,
 
 CREATE TABLE Feature
 (
-P_FeatureNumber int NOT NULL PRIMARY KEY,
+P_FeatureNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 FeatureDesciption varchar(255) NOT NULL,
 )
 
@@ -99,7 +100,8 @@ REFERENCES Release(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
 
 CREATE TABLE SourceRoot
 (
-P_SourceRootNumber int NOT NULL PRIMARY KEY,
+P_SourceRootNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+SourceRootName varchar(255) UNIQUE
 )
 
 CREATE TABLE Branch
@@ -115,39 +117,42 @@ FOREIGN KEY(P_SourceRootNumber) REFERENCES SourceRoot(P_SourceRootNumber),
 FOREIGN KEY(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber) 
 REFERENCES Release(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
 
-BranchNumber int NOT NULL,
+BranchNumber int NOT NULL UNIQUE,
 )
 
 CREATE TABLE DownloadFile
 (
-P_DownloadFileNumber int NOT NULL PRIMARY KEY,
+P_DownloadFileNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 Name varchar(255) NOT NULL UNIQUE,
 )
 
 CREATE TABLE Customer
 (
-P_CustomerNumber int NOT NULL PRIMARY KEY,
+P_CustomerNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 
-CustomerName varchar(255) NOT NULL,
+CustomerFirstName varchar(255) NOT NULL,
+CustomerLastName varchar (255) NOT NULL,
 )
 
 CREATE TABLE PhoneNumber
 (
-P_PhoneNumberID int PRIMARY KEY,
+P_PhoneNumberID int IDENTITY(1,1) PRIMARY KEY,
 
 PhoneNumber varchar(15) NOT NULL,
 PhoneType varchar(10) NOT NULL,
 )
 
-CREATE TABLE Company(
-P_CompanyNumber int PRIMARY KEY,
+CREATE TABLE Company
+(
+P_CompanyNumber int IDENTITY(1,1) PRIMARY KEY,
 
 CompanyName varchar(50),
 CompanyAddress varchar(50),
 )
 
-CREATE TABLE Email(
-P_EmailNumber int PRIMARY KEY,
+CREATE TABLE Email
+(
+P_EmailNumber int IDENTITY(1,1) PRIMARY KEY,
 
 Email varchar(50),
 )

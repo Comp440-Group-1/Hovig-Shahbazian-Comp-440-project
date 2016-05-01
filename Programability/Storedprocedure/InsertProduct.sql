@@ -31,7 +31,7 @@ BEGIN
 		INSERT INTO Product VALUES(@ProductNumber,@ProductName)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error in Creating a Product',10, 1); -- Second substitution argument.
+		RAISERROR(N'THere was an error Inserting Product',10, 1); -- Second substitution argument.
 	END CATCH
 END
 GO

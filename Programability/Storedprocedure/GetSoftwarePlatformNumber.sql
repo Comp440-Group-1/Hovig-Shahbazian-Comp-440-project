@@ -18,9 +18,8 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE InsertSoftwarePlatform
+CREATE PROCEDURE GetSoftwarePlatformNumber
 	-- Add the parameters for the stored procedure here
-	@PlatformNumber int,
 	@PlatformName varchar(255)
 	
 AS
@@ -28,7 +27,7 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	BEGIN TRY
-		INSERT INTO SoftwarePlatform VALUES(@PlatformNumber,@PlatformName)
+		SELECT P_SoftwarePlatformNumber FROM SoftwarePlatform WHERE @PlatformName = PlatformName
 	END TRY
 	BEGIN CATCH
 		RAISERROR(N'THere was an error Inserting a SiftwarePlatform',10, 1); -- Second substitution argument.

@@ -30,7 +30,7 @@ BEGIN
 		INSERT INTO Feature VALUES(@FeatureNumber,@FeatureDescription)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error in inserting a feature',10, 1); 
+		RAISERROR(N'THere was an error Inserting a feature',10, 1); 
 	END CATCH
 END
 GO

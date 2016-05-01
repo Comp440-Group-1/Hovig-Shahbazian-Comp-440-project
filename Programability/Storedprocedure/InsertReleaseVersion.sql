@@ -18,18 +18,22 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE InsertVersion
+CREATE PROCEDURE InsertReleaseVersion
 	-- Add the parameters for the stored procedure here
-	@ProductVersion decimal(2,1)
+	@ProductVersion decimal(2,1),
+	@ReleaseNumber  decimal(2,1), 
+	@ProductNumber  int,
+	@SoftwarePlatform int
+
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	BEGIN TRY
-		INSERT INTO ProductVersion VALUES(@ProductVersion)
+		INSERT INTO ReleaseVersion VALUES(@ProductVersion,@ReleaseNumber, @ProductNumber ,@SoftwarePlatform)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error in inserting a version',10, 1); 
+		RAISERROR(N'THere was an error in Inserting a Release Version Entry',10, 1); 
 	END CATCH
 END
 GO

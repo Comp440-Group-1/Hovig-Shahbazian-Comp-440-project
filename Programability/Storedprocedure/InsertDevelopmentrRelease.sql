@@ -18,20 +18,28 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE InsertSoftwarePlatform
+CREATE PROCEDURE InsertDevelopmentRelease
 	-- Add the parameters for the stored procedure here
-	@PlatformNumber int,
-	@PlatformName varchar(255)
-	
+	@ReleaseNumber  decimal(2,1), 
+	@ProductNumber  int,
+	@SoftwarePlatform int,
+	@StartDate date,
+	@EndDate date,
+	@Commits int,
+	--0 means stable and 1 means unstable
+	@Stability BINARY(1),
+	@Iteration int
 AS
 BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-	
-	BEGIN TRY
-		INSERT INTO SoftwarePlatform VALUES(@PlatformNumber,@PlatformName)
+
+    BEGIN TRY
+		INSERT INTO DevelopmentRelease VALUES(@ReleaseNumber,@ProductNumber,@SoftwarePlatform,@StartDate,@EndDate,@Commits,@Stability,@Iteration)
 	END TRY
 	BEGIN CATCH
-		RAISERROR(N'THere was an error Inserting a SiftwarePlatform',10, 1); -- Second substitution argument.
+		RAISERROR(N'THere was an error Inserting a Development Release',10, 1); -- Second substitution argument.
 	END CATCH
 END
 GO
