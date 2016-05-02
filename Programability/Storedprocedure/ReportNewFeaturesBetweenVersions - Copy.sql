@@ -13,24 +13,27 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE UpdateProductVersion
+CREATE PROCEDURE ReportNewFeatures
 	
 	 --THe Product Number of which Version we will change
-	 @ProductNumber int,
-	 @SoftwarePlatformNumber int,
-	 @ReleaseNumber decimal(2,1),
+	 --@ProductNumber int,
+	 --@SoftwarePlatformNumber int,
+	 --@ReleaseNumber decimal(2,1),
 	 --THe version Number we will chn age the produt to
-	 @ProductVersionNumber decimal(2,1)
+	 @ProductVersionNumber1 decimal(2,1),
+	 @ProductVersionNumber2 decimal(2,1)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	BEGIN TRY
-		UPDATE ReleaseVersion SET P_ProductVersionNumber = @ProductVersionNumber
-		WHERE P_ProductNumber = @ProductNumber AND P_ReleaseNumber = @ReleaseNumber AND P_SoftwarePlatformNumber = @SoftwarePlatformNumber
+		Select P_FeatureNumber FROM FeatureSet WHERE @ProductVersionNumber1 = P_ProductVersionNumber
+		INTERSECT
+		Select P_FeatureNumber FROM FeatureSet WHERE @ProductVersionNumber2 = P_ProductVersionNumber
 	END TRY
 	BEGIN CATCH
-     PRINT 'The given version number does not exist for this product'
+     PRINT 'There was an error in generating this report
+	 '
 	END CATCH
 END
 GO

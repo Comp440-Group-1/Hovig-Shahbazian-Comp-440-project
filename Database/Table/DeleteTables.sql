@@ -4,7 +4,6 @@ Drop TABLE Email
 Drop TABLE Company
 Drop TABLE PhoneNumber
 Drop TABLE Customer
-Drop Table DownloadFile
 Drop TABLE Branch
 Drop TABLE SourceRoot
 Drop TABLE ReleaseVersion

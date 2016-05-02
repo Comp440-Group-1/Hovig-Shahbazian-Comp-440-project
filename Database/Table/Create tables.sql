@@ -64,7 +64,7 @@ P_ProductVersionNumber decimal(2,1) NOT NULL PRIMARY KEY,
 CREATE TABLE Feature
 (
 P_FeatureNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-FeatureDesciption varchar(255) NOT NULL,
+FeatureDesciption varchar(255) NOT NULL UNIQUE,
 )
 
 CREATE TABLE FeatureSet(
@@ -120,11 +120,6 @@ REFERENCES Release(P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),
 BranchNumber int NOT NULL UNIQUE,
 )
 
-CREATE TABLE DownloadFile
-(
-P_DownloadFileNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-Name varchar(255) NOT NULL UNIQUE,
-)
 
 CREATE TABLE Customer
 (
@@ -132,12 +127,16 @@ P_CustomerNumber int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 
 CustomerFirstName varchar(255) NOT NULL,
 CustomerLastName varchar (255) NOT NULL,
+
+UNIQUE(CustomerFirstName,CustomerLastName)
 )
 
 CREATE TABLE PhoneNumber
 (
 P_PhoneNumberID int IDENTITY(1,1) PRIMARY KEY,
+P_CustomerNumber int ,
 
+FOREIGN KEY(P_CustomerNumber) REFERENCES Customer(P_CustomerNumber),
 PhoneNumber varchar(15) NOT NULL,
 PhoneType varchar(10) NOT NULL,
 )
@@ -145,7 +144,9 @@ PhoneType varchar(10) NOT NULL,
 CREATE TABLE Company
 (
 P_CompanyNumber int IDENTITY(1,1) PRIMARY KEY,
+P_CustomerNumber int ,
 
+FOREIGN KEY(P_CustomerNumber) REFERENCES Customer(P_CustomerNumber),
 CompanyName varchar(50),
 CompanyAddress varchar(50),
 )
@@ -153,23 +154,20 @@ CompanyAddress varchar(50),
 CREATE TABLE Email
 (
 P_EmailNumber int IDENTITY(1,1) PRIMARY KEY,
+P_CustomerNumber int ,
+
+FOREIGN KEY(P_CustomerNumber) REFERENCES Customer(P_CustomerNumber),
 
 Email varchar(50),
 )
 
 CREATE TABLE Subscription
 (
-P_CustomerNumber int ,
-P_PhoneNumberID int,
-P_CompanyNumber int,
-P_EmailNumber int,
+P_CustomerNumber int,
 
-PRIMARY KEY(P_CustomerNumber,P_PhoneNumberID ,P_CompanyNumber,P_EmailNumber),
+PRIMARY KEY(P_CustomerNumber),
 
 FOREIGN KEY(P_CustomerNumber) REFERENCES Customer(P_CustomerNumber),
-FOREIGN KEY(P_PhoneNumberID) REFERENCES PhoneNumber(P_PhoneNumberID),
-FOREIGN KEY(P_CompanyNumber) REFERENCES Company(P_CompanyNumber),
-FOREIGN KEY(P_EmailNumber) REFERENCES Email(P_EmailNumber),
 
 CustomerLogin varchar(25) NOT NULL UNIQUE,
 CustomerPassword varchar(25) NOT NULL UNIQUE,
@@ -179,23 +177,16 @@ CustomerPassword varchar(25) NOT NULL UNIQUE,
 CREATE TABLE CustomerDownload
 (
 P_CustomerNumber int ,
-P_PhoneNumberID int,
-P_CompanyNumber int,
-P_EmailNumber int,
-P_DownloadFileNumber int,
 P_ProductNumber int ,
 P_ProductVersionNumber decimal(2,1),
 P_ReleaseNumber decimal(2,1),
 P_SoftwarePlatformNumber int,
 
-PRIMARY KEY(P_CustomerNumber,P_PhoneNumberID,P_CompanyNumber,P_EmailNumber,
-            P_DownloadFileNumber,
-			P_ProductNumber, P_ProductVersionNumber,P_ReleaseNumber, P_SoftwarePlatformNumber),
+PRIMARY KEY(P_CustomerNumber,P_ProductNumber, P_ProductVersionNumber,P_ReleaseNumber, P_SoftwarePlatformNumber),
 
-FOREIGN KEY(P_CustomerNumber, P_PhoneNumberID,P_CompanyNumber,P_EmailNumber) 
-REFERENCES Subscription(P_CustomerNumber,P_PhoneNumberID,P_CompanyNumber,P_EmailNumber),
+FOREIGN KEY(P_CustomerNumber) 
+REFERENCES Customer(P_CustomerNumber),
 
-FOREIGN KEY(P_DownloadFileNumber) REFERENCES DownloadFile(P_DownloadFileNumber),
 
 FOREIGN KEY(P_ProductVersionNumber, P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber) 
 REFERENCES ReleaseVersion(P_ProductVersionNumber,P_ReleaseNumber,P_ProductNumber,P_SoftwarePlatformNumber),

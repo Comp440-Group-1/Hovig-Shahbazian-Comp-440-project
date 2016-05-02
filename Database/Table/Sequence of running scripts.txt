@@ -1,0 +1,12 @@
+INSTRUCTIONS
+-------------
+
+You must First Import the two Excel Files "ProductVersionRelease" and "clients request for downloads" and create a table for each of them,
+
+and name them "Sheet1$" and "ImportedSheet2", respectively.
+
+You then Must Run "CreateTables" script and the "InsertTestData" script
+
+Aftwards, Run the "ImportProductVersionsRelease" script and then the "ImportClientRequestDownloadExcell"
+
+If you see errors, it should tell there is a problem with the insert of data, this should be because the script is attmepting to insert data that already exist in the table
